@@ -32,8 +32,8 @@ This document outlines the high-level technical architecture for an AI-powered S
 │  ┌─────────────────┐           ┌─────────────────┐           ┌─────────────────┐        │
 │  │                 │           │                 │           │                 │        │
 │  │    AGENT 1      │◄─────────►│    AGENT 2      │◄─────────►│    AGENT 3      │        │
-│  │  (SDR Agent)    │           │   (TBD Agent)   │           │   (TBD Agent)   │        │
-│  │                 │           │                 │           │                 │        │
+│  │  (Marketing)    │           │  (Sales Agent)  │           │   (TBD Agent)   │        │
+│  │  Agent Jules    │           │   Agent Joy     │           │                 │        │
 │  └────────┬────────┘           └────────┬────────┘           └────────┬────────┘        │
 │           │                             │                             │                  │
 │           └─────────────────────────────┼─────────────────────────────┘                  │
@@ -278,15 +278,435 @@ The primary sales development agent responsible for prospecting, outreach, and m
 
 ---
 
-## Agent 2: [PLACEHOLDER - Awaiting Details]
+## Agent 2: Sales Agent ("Agent Joy")
 
-*Architecture details will be added once agent specifications are provided.*
+### Purpose
+The Sales Function agent responsible for two key workflows: (1) Individual sales rep prospecting & meeting setting, and (2) Sales acceleration including proposal generation, live product demos, and deal progression.
+
+### Architecture Detail
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                           AGENT 2: SALES AGENT (JOY)                                     │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│  ╔═══════════════════════════════════════════════════════════════════════════════════╗  │
+│  ║            PART 1: PROSPECTING & MEETING SETTER                                    ║  │
+│  ╠═══════════════════════════════════════════════════════════════════════════════════╣  │
+│  ║                                                                                    ║  │
+│  ║   KNOWLEDGE INPUTS                         SALES REP CONTEXT                       ║  │
+│  ║   ┌─────────────────────┐                 ┌─────────────────────┐                  ║  │
+│  ║   │  Company Knowledge  │                 │   Sales Rep Profile │                  ║  │
+│  ║   │  ┌───────────────┐  │                 │  ┌───────────────┐  │                  ║  │
+│  ║   │  │Company Profile│  │                 │  │LinkedIn Profile│  │                  ║  │
+│  ║   │  ├───────────────┤  │                 │  ├───────────────┤  │                  ║  │
+│  ║   │  │ Case Studies  │  │                 │  │Company Website│  │                  ║  │
+│  ║   │  ├───────────────┤  │                 │  ├───────────────┤  │                  ║  │
+│  ║   │  │  Value Prop   │  │                 │  │  Work Email   │  │                  ║  │
+│  ║   │  ├───────────────┤  │                 │  └───────────────┘  │                  ║  │
+│  ║   │  │   Products    │  │                 └─────────────────────┘                  ║  │
+│  ║   │  ├───────────────┤  │                            │                             ║  │
+│  ║   │  │   Services    │  │                            ▼                             ║  │
+│  ║   │  ├───────────────┤  │        ┌─────────────────────────────────────────┐      ║  │
+│  ║   │  │  Challenges   │  │───────►│         AGENTIC MESSAGING ENGINE        │      ║  │
+│  ║   │  └───────────────┘  │        │  ┌─────────┐ ┌─────────┐ ┌─────────┐   │      ║  │
+│  ║   └─────────────────────┘        │  │LinkedIn │ │  Email  │ │  Call   │   │      ║  │
+│  ║                                  │  │Outreach │ │Outreach │ │Outreach │   │      ║  │
+│  ║                                  │  └────┬────┘ └────┬────┘ └────┬────┘   │      ║  │
+│  ║                                  └───────┼──────────┼──────────┼─────────┘      ║  │
+│  ║                                          └──────────┼──────────┘                 ║  │
+│  ║                                                     ▼                             ║  │
+│  ║                                    ┌───────────────────────────┐                  ║  │
+│  ║                                    │  PROSPECT → MEETING BOOKED│                  ║  │
+│  ║                                    └───────────────────────────┘                  ║  │
+│  ╚═══════════════════════════════════════════════════════════════════════════════════╝  │
+│                                           │                                              │
+│                                           ▼                                              │
+│  ╔═══════════════════════════════════════════════════════════════════════════════════╗  │
+│  ║            PART 2: SALES ACCELERATOR                                               ║  │
+│  ╠═══════════════════════════════════════════════════════════════════════════════════╣  │
+│  ║                                                                                    ║  │
+│  ║   SALES SUPPORT TOOLS                     MEETING ENABLEMENT                       ║  │
+│  ║   ┌─────────────────────┐                 ┌─────────────────────────────────────┐  ║  │
+│  ║   │   Pre-Meeting       │                 │        LIVE MEETING SUPPORT         │  ║  │
+│  ║   │  ┌───────────────┐  │                 │                                     │  ║  │
+│  ║   │  │ Requirements  │  │                 │  ┌─────────┐ ┌─────────┐ ┌───────┐ │  ║  │
+│  ║   │  │   Document    │  │                 │  │  Video  │ │ Screen  │ │ Phone │ │  ║  │
+│  ║   │  ├───────────────┤  │                 │  │  Call   │ │  Share  │ │ Call  │ │  ║  │
+│  ║   │  │   Proposal    │  │────────────────►│  └─────────┘ └─────────┘ └───────┘ │  ║  │
+│  ║   │  │  Generator    │  │                 │                                     │  ║  │
+│  ║   │  ├───────────────┤  │                 │  ┌─────────────────────────────┐   │  ║  │
+│  ║   │  │Live Product   │  │                 │  │    LIVE PRODUCT EXPERT BOT  │   │  ║  │
+│  ║   │  │ Expert Bot    │  │                 │  │                             │   │  ║  │
+│  ║   │  └───────────────┘  │                 │  │  • Real-time Q&A            │   │  ║  │
+│  ║   └─────────────────────┘                 │  │  • Demo Assistance          │   │  ║  │
+│  ║                                           │  │  • Feature Explanations     │   │  ║  │
+│  ║   ┌─────────────────────┐                 │  │  • Objection Handling       │   │  ║  │
+│  ║   │   Deal Support      │                 │  └─────────────────────────────┘   │  ║  │
+│  ║   │  ┌───────────────┐  │                 └─────────────────────────────────────┘  ║  │
+│  ║   │  │ Sales Rep     │  │                                │                         ║  │
+│  ║   │  │Score/Credit   │  │                                ▼                         ║  │
+│  ║   │  │Qualification  │  │                 ┌─────────────────────────────────────┐  ║  │
+│  ║   │  ├───────────────┤  │                 │        POST-MEETING ACTIONS         │  ║  │
+│  ║   │  │ Discussion    │  │                 │                                     │  ║  │
+│  ║   │  │    Flow       │  │────────────────►│  ┌─────────────┐ ┌───────────────┐ │  ║  │
+│  ║   │  ├───────────────┤  │                 │  │  Auto BDR   │ │  Follow-up    │ │  ║  │
+│  ║   │  │  Auto BDR     │  │                 │  │   Updates   │ │  Sequences    │ │  ║  │
+│  ║   │  │   Updates     │  │                 │  │   (CRM)     │ │               │ │  ║  │
+│  ║   │  └───────────────┘  │                 │  └─────────────┘ └───────────────┘ │  ║  │
+│  ║   └─────────────────────┘                 └─────────────────────────────────────┘  ║  │
+│  ║                                                          │                         ║  │
+│  ╚══════════════════════════════════════════════════════════╪═════════════════════════╝  │
+│                                                             ▼                            │
+│                                    ┌─────────────────────────────────────┐               │
+│                                    │    SALES PIPELINE PROGRESSION       │               │
+│                                    │                                     │               │
+│                                    │  Meeting → Post-Meeting → Deal Close│               │
+│                                    └─────────────────────────────────────┘               │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Agent 2 Component Breakdown
+
+#### 1. Sales Rep Context Module
+```
+┌─────────────────────────────────────────────────────────┐
+│               SALES REP CONTEXT                          │
+├─────────────────────────────────────────────────────────┤
+│                                                          │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │   LinkedIn   │  │   Company    │  │    Email     │   │
+│  │   Profile    │  │   Website    │  │   Signature  │   │
+│  │              │  │              │  │              │   │
+│  │ • Bio/Title  │  │ • About Page │  │ • Contact    │   │
+│  │ • Experience │  │ • Team Info  │  │ • Calendar   │   │
+│  │ • Network    │  │ • Portfolio  │  │ • Avail.     │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘   │
+│          │                │                 │            │
+│          └────────────────┼─────────────────┘            │
+│                           ▼                              │
+│                  ┌──────────────┐                        │
+│                  │  Rep Profile │                        │
+│                  │   Builder    │                        │
+│                  └──────────────┘                        │
+└─────────────────────────────────────────────────────────┘
+```
+
+#### 2. Proposal Generator Module
+```
+┌─────────────────────────────────────────────────────────┐
+│                PROPOSAL GENERATOR                        │
+├─────────────────────────────────────────────────────────┤
+│                                                          │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │            REQUIREMENTS ANALYZER                 │    │
+│  │                                                  │    │
+│  │  Requirements Doc ──► Extract Needs ──► Map to  │    │
+│  │                                         Products│    │
+│  └─────────────────────────────────────────────────┘    │
+│                          │                               │
+│                          ▼                               │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │            PROPOSAL BUILDER                      │    │
+│  │                                                  │    │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐      │    │
+│  │  │ Solution │  │  Pricing │  │ Timeline │      │    │
+│  │  │  Design  │  │  Matrix  │  │ Builder  │      │    │
+│  │  └──────────┘  └──────────┘  └──────────┘      │    │
+│  └─────────────────────────────────────────────────┘    │
+│                          │                               │
+│                          ▼                               │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │            OUTPUT FORMATS                        │    │
+│  │                                                  │    │
+│  │  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐   │    │
+│  │  │  PDF   │ │  DOCX  │ │ Slides │ │ Email  │   │    │
+│  │  └────────┘ └────────┘ └────────┘ └────────┘   │    │
+│  └─────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────┘
+```
+
+#### 3. Live Product Expert Bot
+```
+┌─────────────────────────────────────────────────────────┐
+│              LIVE PRODUCT EXPERT BOT                     │
+├─────────────────────────────────────────────────────────┤
+│                                                          │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │            KNOWLEDGE SOURCES                     │    │
+│  │                                                  │    │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐      │    │
+│  │  │ Product  │  │   FAQ    │  │ Pricing  │      │    │
+│  │  │   Docs   │  │   Base   │  │   Info   │      │    │
+│  │  └──────────┘  └──────────┘  └──────────┘      │    │
+│  └─────────────────────────────────────────────────┘    │
+│                          │                               │
+│                          ▼                               │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │            REAL-TIME CAPABILITIES                │    │
+│  │                                                  │    │
+│  │  • Answer prospect questions during calls       │    │
+│  │  • Suggest relevant case studies                │    │
+│  │  • Handle technical objections                  │    │
+│  │  • Provide competitive comparisons              │    │
+│  │  • Generate custom demo flows                   │    │
+│  └─────────────────────────────────────────────────┘    │
+│                          │                               │
+│                          ▼                               │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │            DELIVERY CHANNELS                     │    │
+│  │                                                  │    │
+│  │  ┌────────────┐  ┌────────────┐                 │    │
+│  │  │ Sidebar UI │  │  Whisper   │                 │    │
+│  │  │ (Sales Rep)│  │   Mode     │                 │    │
+│  │  └────────────┘  └────────────┘                 │    │
+│  └─────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────┘
+```
+
+#### 4. CRM Auto-Update Module
+```
+┌─────────────────────────────────────────────────────────┐
+│                CRM AUTO-UPDATE                           │
+├─────────────────────────────────────────────────────────┤
+│                                                          │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │            ACTIVITY CAPTURE                      │    │
+│  │                                                  │    │
+│  │  Emails ─┐                                       │    │
+│  │  Calls  ─┼──► Activity Parser ──► Structured    │    │
+│  │  Meetings┘                         Data         │    │
+│  └─────────────────────────────────────────────────┘    │
+│                          │                               │
+│                          ▼                               │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │            AUTO-LOGGING                          │    │
+│  │                                                  │    │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐      │    │
+│  │  │ Contact  │  │   Deal   │  │   Task   │      │    │
+│  │  │ Updates  │  │ Progress │  │ Creation │      │    │
+│  │  └──────────┘  └──────────┘  └──────────┘      │    │
+│  └─────────────────────────────────────────────────┘    │
+│                          │                               │
+│                          ▼                               │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │            CRM SYNC                              │    │
+│  │                                                  │    │
+│  │  ┌────────────┐  ┌────────────┐                 │    │
+│  │  │ Salesforce │  │  HubSpot   │                 │    │
+│  │  └────────────┘  └────────────┘                 │    │
+│  └─────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────┘
+```
 
 ---
 
 ## Agent 3: [PLACEHOLDER - Awaiting Details]
 
 *Architecture details will be added once agent specifications are provided.*
+
+---
+
+## n8n Approach - Feasibility Analysis
+
+### Overview
+
+n8n is a workflow automation platform that could serve as the orchestration backbone for the SDR application. Here's a detailed feasibility analysis:
+
+### Architecture with n8n
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                           n8n-BASED SDR ARCHITECTURE                                     │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│  ┌─────────────────────────────────────────────────────────────────────────────────┐    │
+│  │                              n8n ORCHESTRATION LAYER                             │    │
+│  │                                                                                  │    │
+│  │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐                  │    │
+│  │  │  Trigger Layer  │  │  Workflow Layer │  │  Integration    │                  │    │
+│  │  │                 │  │                 │  │     Layer       │                  │    │
+│  │  │ • Webhooks      │  │ • Conditional   │  │ • 400+ native   │                  │    │
+│  │  │ • Cron Jobs     │  │   branching     │  │   integrations  │                  │    │
+│  │  │ • CRM Events    │  │ • Loops         │  │ • HTTP requests │                  │    │
+│  │  │ • Email Events  │  │ • Error handling│  │ • Custom APIs   │                  │    │
+│  │  └─────────────────┘  └─────────────────┘  └─────────────────┘                  │    │
+│  └─────────────────────────────────────────────────────────────────────────────────┘    │
+│                                           │                                              │
+│                    ┌──────────────────────┼──────────────────────┐                      │
+│                    ▼                      ▼                      ▼                      │
+│  ┌─────────────────────┐  ┌─────────────────────┐  ┌─────────────────────┐             │
+│  │   n8n WORKFLOW:     │  │   n8n WORKFLOW:     │  │   n8n WORKFLOW:     │             │
+│  │   AGENT 1 (Jules)   │  │   AGENT 2 (Joy)     │  │   AGENT 3 (TBD)     │             │
+│  │                     │  │                     │  │                     │             │
+│  │  ┌───────────────┐  │  │  ┌───────────────┐  │  │  ┌───────────────┐  │             │
+│  │  │  AI Node      │  │  │  │  AI Node      │  │  │  │  AI Node      │  │             │
+│  │  │  (OpenAI/     │  │  │  │  (OpenAI/     │  │  │  │  (OpenAI/     │  │             │
+│  │  │   Claude)     │  │  │  │   Claude)     │  │  │  │   Claude)     │  │             │
+│  │  └───────────────┘  │  │  └───────────────┘  │  │  └───────────────┘  │             │
+│  │         │           │  │         │           │  │         │           │             │
+│  │         ▼           │  │         ▼           │  │         ▼           │             │
+│  │  ┌───────────────┐  │  │  ┌───────────────┐  │  │  ┌───────────────┐  │             │
+│  │  │ Tool Nodes    │  │  │  │ Tool Nodes    │  │  │  │ Tool Nodes    │  │             │
+│  │  │ (Outreach)    │  │  │  │ (Sales Accel) │  │  │  │ (TBD)         │  │             │
+│  │  └───────────────┘  │  │  └───────────────┘  │  │  └───────────────┘  │             │
+│  └─────────────────────┘  └─────────────────────┘  └─────────────────────┘             │
+│                                           │                                              │
+│                                           ▼                                              │
+│  ┌─────────────────────────────────────────────────────────────────────────────────┐    │
+│  │                         EXTERNAL AI SERVICES (via HTTP)                          │    │
+│  │                                                                                  │    │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐            │    │
+│  │  │  LangChain  │  │   Vector    │  │   Custom    │  │   RAG       │            │    │
+│  │  │   Service   │  │  Store API  │  │  Agent API  │  │   Service   │            │    │
+│  │  │  (FastAPI)  │  │  (Pinecone) │  │  (Python)   │  │             │            │    │
+│  │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘            │    │
+│  └─────────────────────────────────────────────────────────────────────────────────┘    │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Feasibility Matrix
+
+| Aspect | n8n Capability | Feasibility | Notes |
+|--------|---------------|-------------|-------|
+| **Workflow Orchestration** | ✅ Excellent | HIGH | Native strength - visual workflows |
+| **Integrations** | ✅ Excellent | HIGH | 400+ built-in nodes (LinkedIn, Email, CRM, etc.) |
+| **Webhooks/Triggers** | ✅ Excellent | HIGH | Multiple trigger types supported |
+| **Scheduling** | ✅ Excellent | HIGH | Cron-based scheduling built-in |
+| **LLM Integration** | ⚠️ Basic | MEDIUM | OpenAI node exists, but limited for complex agents |
+| **Complex Agent Logic** | ⚠️ Limited | MEDIUM | Requires external services for sophisticated reasoning |
+| **State Management** | ⚠️ Limited | MEDIUM | Stateless by nature, needs external DB |
+| **RAG Pipelines** | ❌ Not Native | LOW | Must build externally and connect via HTTP |
+| **Real-time Processing** | ⚠️ Limited | MEDIUM | Can handle, but not optimized for high concurrency |
+| **Self-Hosting** | ✅ Excellent | HIGH | Full control over data and infrastructure |
+| **Cost** | ✅ Excellent | HIGH | Self-hosted = low cost, cloud = fair pricing |
+
+### Recommended Hybrid Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                      RECOMMENDED: HYBRID n8n + CUSTOM AGENT ARCHITECTURE                 │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│  ┌─────────────────────────────────────────────────────────────────────────────────┐    │
+│  │                              n8n (ORCHESTRATION)                                 │    │
+│  │                                                                                  │    │
+│  │   USE FOR:                                                                       │    │
+│  │   ✓ Workflow orchestration & scheduling                                         │    │
+│  │   ✓ Integration layer (CRM, Email, LinkedIn, Calendar)                          │    │
+│  │   ✓ Webhook handling & event processing                                         │    │
+│  │   ✓ Simple automation sequences                                                 │    │
+│  │   ✓ Error handling & retries                                                    │    │
+│  │   ✓ Monitoring & logging                                                        │    │
+│  └─────────────────────────────────────────────────────────────────────────────────┘    │
+│                                           │                                              │
+│                                           ▼                                              │
+│  ┌─────────────────────────────────────────────────────────────────────────────────┐    │
+│  │                        CUSTOM AGENT SERVICE (FastAPI/Python)                     │    │
+│  │                                                                                  │    │
+│  │   USE FOR:                                                                       │    │
+│  │   ✓ Complex AI agent reasoning (LangChain/LangGraph)                            │    │
+│  │   ✓ RAG pipeline & vector search                                                │    │
+│  │   ✓ Multi-step decision making                                                  │    │
+│  │   ✓ Conversation state management                                               │    │
+│  │   ✓ Personalization engine                                                      │    │
+│  │   ✓ Content generation with fine control                                        │    │
+│  └─────────────────────────────────────────────────────────────────────────────────┘    │
+│                                                                                          │
+│  ┌─────────────────────────────────────────────────────────────────────────────────┐    │
+│  │                           COMMUNICATION FLOW                                     │    │
+│  │                                                                                  │    │
+│  │   ┌──────────┐         ┌──────────┐         ┌──────────┐         ┌──────────┐  │    │
+│  │   │ Trigger  │────────►│  n8n     │────────►│  Agent   │────────►│ Execute  │  │    │
+│  │   │ (Webhook/│         │ Workflow │  HTTP   │ Service  │  Return │  Action  │  │    │
+│  │   │  Cron)   │         │          │────────►│ (AI)     │────────►│ (n8n)    │  │    │
+│  │   └──────────┘         └──────────┘         └──────────┘         └──────────┘  │    │
+│  │                                                                                  │    │
+│  └─────────────────────────────────────────────────────────────────────────────────┘    │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### n8n Workflow Examples
+
+#### Example 1: Outreach Sequence Workflow
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                           n8n WORKFLOW: OUTREACH SEQUENCE                                │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│  ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐              │
+│  │Schedule │───►│ Get     │───►│ HTTP:   │───►│ IF: Has │───►│LinkedIn │              │
+│  │Trigger  │    │ Leads   │    │ Agent   │    │Response?│    │  Node   │              │
+│  │(Daily)  │    │ (DB)    │    │ Service │    │         │    │         │              │
+│  └─────────┘    └─────────┘    └─────────┘    └────┬────┘    └─────────┘              │
+│                                                    │                                     │
+│                                    ┌───────────────┴───────────────┐                    │
+│                                    │ NO                         YES│                    │
+│                                    ▼                               ▼                    │
+│                              ┌─────────┐                    ┌─────────┐                 │
+│                              │ Email   │                    │ Update  │                 │
+│                              │ Node    │                    │  CRM    │                 │
+│                              └─────────┘                    └─────────┘                 │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Example 2: Meeting Booked Handler
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                           n8n WORKFLOW: MEETING BOOKED                                   │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│  ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐              │
+│  │Webhook: │───►│ Parse   │───►│ HTTP:   │───►│ Create  │───►│ Send    │              │
+│  │Calendar │    │ Event   │    │ Agent   │    │ CRM     │    │ Confirm │              │
+│  │ Event   │    │ Data    │    │ Prep    │    │ Record  │    │  Email  │              │
+│  └─────────┘    └─────────┘    └─────────┘    └─────────┘    └─────────┘              │
+│                                     │                                                    │
+│                                     ▼                                                    │
+│                              ┌─────────────┐                                            │
+│                              │ Generated:  │                                            │
+│                              │ • Agenda    │                                            │
+│                              │ • Prep Docs │                                            │
+│                              │ • Questions │                                            │
+│                              └─────────────┘                                            │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Pros & Cons Summary
+
+#### ✅ Pros of n8n Approach
+1. **Rapid Development** - Visual workflow builder accelerates development
+2. **400+ Integrations** - Native connectors for most sales tools
+3. **Self-Hosted Option** - Full data control, GDPR compliance
+4. **Low Code** - Non-developers can modify workflows
+5. **Cost Effective** - Self-hosted is essentially free
+6. **Monitoring Built-in** - Execution logs, error tracking
+7. **Scalable** - Can run multiple instances with queue mode
+
+#### ❌ Cons of n8n Approach
+1. **Complex AI Logic** - Requires external services for sophisticated agents
+2. **State Management** - Not built for stateful conversations
+3. **RAG Limitations** - No native vector search capabilities
+4. **Testing Complexity** - Hard to unit test complex AI workflows
+5. **Performance** - May bottleneck under high concurrent loads
+6. **Learning Curve** - Team needs n8n expertise
+
+### Final Recommendation
+
+| Approach | Best For | Complexity | Time to Market |
+|----------|----------|------------|----------------|
+| **Pure n8n** | Simple automation, basic AI | Low | Fast (2-3 months) |
+| **Hybrid (Recommended)** | Full SDR platform with smart agents | Medium | Medium (4-6 months) |
+| **Pure Custom** | Maximum flexibility, complex AI | High | Slow (6-12 months) |
+
+**Recommendation: HYBRID APPROACH**
+- Use n8n for orchestration, integrations, and scheduling
+- Build custom Python services for AI agent reasoning
+- Connect via HTTP/webhooks for seamless integration
 
 ---
 
@@ -423,15 +843,17 @@ The primary sales development agent responsible for prospecting, outreach, and m
 
 ## Next Steps
 
-1. **Agent 2 Definition** - Awaiting specifications
-2. **Agent 3 Definition** - Awaiting specifications
-3. **Inter-agent Communication** - Define how agents collaborate
-4. **Detailed API Specifications** - OpenAPI/Swagger docs
-5. **Database Schema Design** - Entity relationships
-6. **CI/CD Pipeline Setup** - GitHub Actions / GitLab CI
+1. ~~**Agent 1 Definition**~~ ✅ Complete (Marketing Agent - Jules)
+2. ~~**Agent 2 Definition**~~ ✅ Complete (Sales Agent - Joy)
+3. **Agent 3 Definition** - Awaiting specifications
+4. **n8n vs Custom Decision** - Finalize architecture approach
+5. **Inter-agent Communication** - Define how agents collaborate
+6. **Detailed API Specifications** - OpenAPI/Swagger docs
+7. **Database Schema Design** - Entity relationships
+8. **CI/CD Pipeline Setup** - GitHub Actions / GitLab CI
 
 ---
 
-*Document Version: 1.0*
+*Document Version: 1.1*
 *Last Updated: January 2026*
-*Status: In Progress - Awaiting Agent 2 & 3 specifications*
+*Status: In Progress - Awaiting Agent 3 specifications*
