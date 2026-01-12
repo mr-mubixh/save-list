@@ -1,0 +1,102 @@
+
+═══════════════════════════════════════════════════════════════════════════════════════════
+                            AI AGENT PLATFORM - TECHNICAL FLOW
+═══════════════════════════════════════════════════════════════════════════════════════════
+
+
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │                                                                                 │
+    │                    CLIENT / ADMIN DASHBOARD                                     │
+    │                       (React / Next.js)                                         │
+    │                                                                                 │
+    │    • Agent Configuration          • Knowledge Base Upload                       │
+    │    • Integration Setup            • Analytics & Reporting                       │
+    │                                                                                 │
+    └─────────────────────────────────────┬───────────────────────────────────────────┘
+                                          │
+                                          │ REST API
+                                          ▼
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │                                                                                 │
+    │                              FASTAPI                                            │
+    │                     (Core Backend Service)                                      │
+    │                                                                                 │
+    │    • Tenant Management            • Authentication (JWT)                        │
+    │    • Agent Config Storage         • API Gateway                                 │
+    │                                                                                 │
+    │                            ┌──────────────┐                                     │
+    │                            │  PostgreSQL  │                                     │
+    │                            │   (Database) │                                     │
+    │                            └──────────────┘                                     │
+    │                                                                                 │
+    └─────────────────────────────────────┬───────────────────────────────────────────┘
+                                          │
+                                          │ Trigger Agent
+                                          ▼
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │                                                                                 │
+    │                          LANGCHAIN AGENT                                        │
+    │                        (AI Reasoning Layer)                                     │
+    │                                                                                 │
+    │    ┌──────────────────┐                    ┌──────────────────┐                 │
+    │    │    Vector DB     │                    │   OpenAI / LLM   │                 │
+    │    │   (Pinecone)     │◄──── RAG ─────────►│   (GPT-4/Claude) │                 │
+    │    │                  │                    │                  │                 │
+    │    │ • Knowledge Base │                    │ • Reasoning      │                 │
+    │    │ • Company Docs   │                    │ • Generation     │                 │
+    │    │ • Products/FAQs  │                    │ • Personalization│                 │
+    │    └──────────────────┘                    └──────────────────┘                 │
+    │                                                                                 │
+    └─────────────────────────────────────┬───────────────────────────────────────────┘
+                                          │
+                                          │ Execute Actions
+                                          ▼
+    ┌─────────────────────────────────────────────────────────────────────────────────┐
+    │                                                                                 │
+    │                           N8N WORKFLOWS                                         │
+    │                      (Automation & Integrations)                                │
+    │                                                                                 │
+    │    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐                       │
+    │    │   JULES     │    │    JOY      │    │   GEORGE    │                       │
+    │    │  Workflows  │    │  Workflows  │    │  Workflows  │                       │
+    │    └─────────────┘    └─────────────┘    └─────────────┘                       │
+    │                                                                                 │
+    │    • Email Outreach (SendGrid)        • CRM Sync (Salesforce/HubSpot)          │
+    │    • LinkedIn Automation              • Calendar Booking (Cal.com)              │
+    │    • Phone/SMS (Twilio)               • Support Tickets (Zendesk)              │
+    │    • Lead Enrichment (Apollo)         • Webhooks & Callbacks                   │
+    │                                                                                 │
+    └─────────────────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════════════════
+                                    SIMPLE FLOW
+═══════════════════════════════════════════════════════════════════════════════════════════
+
+
+  Dashboard ──────► FastAPI ──────► LangChain Agent ──────► n8n Workflows
+  (React)          (Backend)       (AI + RAG)              (Integrations)
+     │                 │                  │                       │
+     │                 │                  │                       │
+     ▼                 ▼                  ▼                       ▼
+  Config UI       PostgreSQL      Pinecone + OpenAI      Email, LinkedIn,
+  Analytics       Auth/Tenants    Reasoning Engine       CRM, Calendar...
+
+
+═══════════════════════════════════════════════════════════════════════════════════════════
+                                  TECH STACK
+═══════════════════════════════════════════════════════════════════════════════════════════
+
+
+  LAYER              TECHNOLOGY              PURPOSE
+  ─────              ──────────              ───────
+  Frontend           Next.js / React         Dashboard & Config UI
+  Backend            Python FastAPI          API, Auth, Tenant Management
+  Database           PostgreSQL              Structured Data Storage
+  AI Layer           LangChain + OpenAI      Agent Reasoning & RAG
+  Vector Store       Pinecone                Knowledge Base Embeddings
+  Workflows          n8n (Self-Hosted)       Automation & Integrations
+  Cache              Redis                   Sessions & Queue
+
+
+═══════════════════════════════════════════════════════════════════════════════════════════
